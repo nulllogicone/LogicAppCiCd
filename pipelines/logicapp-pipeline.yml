@@ -1,0 +1,43 @@
+trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - src/*
+
+parameters:
+- name: environments
+  type: object
+  default:
+    - test
+    - prod
+
+variables:
+  azureSubscription: 'Your-Azure-Service-Connection'
+
+stages:
+- ${{ each env in parameters.environments }}:
+  - stage: Deploy_${{ env }}
+    displayName: 'Deploy to ${{ env }}'
+    jobs:
+    - deployment: Deploy_LogicApp
+      displayName: 'Deploy Logic App'
+      environment: ${{ env }}
+      pool:
+        vmImage: 'ubuntu-latest'
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - task: AzureCLI@2
+              inputs:
+                azureSubscription: $(azureSubscription)
+                scriptType: 'bash'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  az logic workflow create \
+                    --resource-group $(resourceGroup) \
+                    --location $(location) \
+                    --name "logic-${{ env }}" \
+                    --definition @$(System.DefaultWorkingDirectory)/src/workflow.json
