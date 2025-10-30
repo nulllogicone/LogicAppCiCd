@@ -1,0 +1,41 @@
+name: Deploy Bicep to Azure
+
+on:
+  push:
+    branches: [ 'main' ]
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    name: Deploy main.bicep
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy Bicep at subscription scope
+        uses: azure/cli@v1
+        env:
+          AZURE_LOCATION: ${{ secrets.AZURE_LOCATION }}
+        with:
+          inlineScript: |
+            echo "Starting subscription-scoped deployment of infra/main.bicep"
+            # Deploy at subscription scope. The Bicep file is expected to handle creating the resource group.
+            az deployment sub create \
+              --location "$AZURE_LOCATION" \
+              --template-file "infra/main.bicep" \
+              --name deploy-main-bicep
+
+# Notes:
+# - You must create the following repository secrets in GitHub for this job to run:
+#   1) AZURE_CREDENTIALS    -> Service principal JSON (see GitHub Actions + Azure docs to generate)
+#   2) AZURE_LOCATION       -> Azure region (e.g. westeurope) used for subscription-scoped deployment operations
+#   3) AZURE_SUBSCRIPTION_ID -> (optional but recommended) the Azure subscription id
+# - Because `infra/main.bicep` deploys at subscription scope and creates the resource group itself, the workflow does not
+#   supply a `resourceGroupName`. If `main.bicep` requires parameters, either add them to the inline script above or
+#   provide a parameters file (example: `--parameters @infra/parameters.json`).
