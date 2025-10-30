@@ -24,12 +24,14 @@ jobs:
           AZURE_LOCATION: ${{ secrets.AZURE_LOCATION }}
         with:
           inlineScript: |
-            echo "Starting subscription-scoped deployment of infra/main.bicep"
+            echo "Starting subscription-scoped deployment of infra/main.bicep with test.bicepparam"
             # Deploy at subscription scope. The Bicep file is expected to handle creating the resource group.
             az deployment sub create \
               --location "$AZURE_LOCATION" \
               --template-file "infra/main.bicep" \
+              --parameters "infra/test.bicepparam" \
               --name deploy-main-bicep
+
 
 # Notes:
 # - You must create the following repository secrets in GitHub for this job to run:
