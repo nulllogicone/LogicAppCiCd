@@ -7,13 +7,14 @@ param projectPrefix string
 param logAnalyticsWorkspaceId string
 param tags object = {}
 
+var uniqueStringSuffix = uniqueString(subscription().id, resourceGroupName)
 var resourceGroupName = '${projectPrefix}-${environment}-RG'
-var logicAppName = '${projectPrefix}-${uniqueString(subscription().id, resourceGroupName)}'
+var logicAppName = '${projectPrefix}-${uniqueStringSuffix}'
 var hostingPlanName = '${projectPrefix}-hostingplan'
 var managedIdentityName = '${projectPrefix}-mgmtidentity'
-var keyVaultName = '${projectPrefix}-keyvault'
+var keyVaultName = '${take('${logicAppName}', 21)}-kv'
 var applicationInsightsName = '${projectPrefix}-appinsights'
-var storageAccountName = take(toLower(replace('${projectPrefix}sa${uniqueString(deployment().name, location)}', '-', '')), 24)
+var storageAccountName = take(toLower(replace('${projectPrefix}${uniqueStringSuffix}', '-', '')), 24)
 
 resource appResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   name: resourceGroupName
@@ -112,6 +113,7 @@ module logicapp 'br/public:avm/res/web/site:0.11.1' = {
       WEBSITE_CONTENTSHARE: toLower(projectPrefix)
       APP_KIND: 'workflowApp'
       WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(VaultName=${keyvault.outputs.name};SecretName=${storageAccountName}-connectionstring)'
+      AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvault.outputs.name};SecretName=${storageAccountName}-connectionstring)'
     }
   }
 }

@@ -1,0 +1,29 @@
+meta {
+  name: Hi copy
+  type: http
+  seq: 3
+}
+
+post {
+  url: https://logicappcicd-ckiiwfp25kawu.azurewebsites.net:443/api/Echo/triggers/When_an_HTTP_request_is_received/invoke?api-version=2022-05-01&sp=/triggers/When_an_HTTP_request_is_received/run&sv=1.0&sig=EYmPVGXCeVqj-pnmEbjA0EiSaYCI8VhfrQFflCWGtsU
+  body: json
+  auth: inherit
+}
+
+params:query {
+  api-version: 2022-05-01
+  sp: /triggers/When_an_HTTP_request_is_received/run
+  sv: 1.0
+  sig: EYmPVGXCeVqj-pnmEbjA0EiSaYCI8VhfrQFflCWGtsU
+}
+
+body:json {
+  {
+    "name":"oli tolli hhf"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
