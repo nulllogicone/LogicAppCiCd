@@ -36,7 +36,7 @@
                 "inputs": {
                     "parameters": {
                         "containerName": "logicapps",
-                        "blobName": "first.txt",
+                        "blobName": "@{utcNow('yyyy-MM-dd-HH-mm-ss')}.txt",
                         "content": "Hi @{body('Parse_JSON')?['name']} from local"
                     },
                     "serviceProviderConfiguration": {
