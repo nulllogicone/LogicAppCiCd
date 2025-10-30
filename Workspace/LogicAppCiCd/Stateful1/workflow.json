@@ -11,7 +11,7 @@
                     "body": "Hi @{body('Parse_JSON')?['name']} you are welcome to LogicApp"
                 },
                 "runAfter": {
-                    "Parse_JSON": [
+                    "Upload_blob_to_storage_container": [
                         "SUCCEEDED"
                     ]
                 }
@@ -30,6 +30,26 @@
                     }
                 },
                 "runAfter": {}
+            },
+            "Upload_blob_to_storage_container": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "containerName": "logicapps",
+                        "blobName": "first.txt",
+                        "content": "Hi @{body('Parse_JSON')?['name']} from local"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureBlob",
+                        "operationId": "uploadBlob",
+                        "serviceProviderId": "/serviceProviders/AzureBlob"
+                    }
+                },
+                "runAfter": {
+                    "Parse_JSON": [
+                        "SUCCEEDED"
+                    ]
+                }
             }
         },
         "outputs": {},
