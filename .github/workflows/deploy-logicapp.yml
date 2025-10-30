@@ -1,0 +1,75 @@
+name: Build and Deploy Logic App
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy Logic App
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Azure Functions Core Tools
+      run: |
+        curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+        sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+        sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-$(lsb_release -cs)-prod $(lsb_release -cs) main" > /etc/apt/sources.list.d/dotnetdev.list'
+        sudo apt-get update
+        sudo apt-get install -y azure-functions-core-tools-4
+
+    - name: Build Logic App
+      run: |
+        cd "Workspace/LogicAppCiCd"
+        func extensions install
+        dotnet build
+
+    - name: Package Logic App
+      run: |
+        cd "Workspace/LogicAppCiCd"
+        zip -r ../logicapp.zip ./*
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Deploy Logic App
+      env:
+        LOGICAPP_NAME: ${{ vars.AZURE_LOGICAPP_NAME }}
+        RESOURCE_GROUP: ${{ vars.AZURE_RESOURCE_GROUP }}
+      run: |
+        if [ -z "${LOGICAPP_NAME}" ] || [ -z "${RESOURCE_GROUP}" ]; then
+          echo "ERROR: AZURE_LOGICAPP_NAME or AZURE_RESOURCE_GROUP variable is not set" >&2
+          exit 1
+        fi
+
+        echo "Deploying Logic App to: ${LOGICAPP_NAME}"
+        
+        az functionapp deployment source config-zip \
+          --resource-group "${RESOURCE_GROUP}" \
+          --name "${LOGICAPP_NAME}" \
+          --src "Workspace/logicapp.zip"
+
+# Notes:
+# - This workflow requires the following:
+#   Repository Secrets:
+#   - AZURE_CREDENTIALS : JSON Service Principal credentials for azure/login
+#     Example create: az ad sp create-for-rbac --name "my-sp" --role contributor 
+#       --scopes /subscriptions/<subId>/resourceGroups/<rg> --sdk-auth
+#   - AZURE_SUBSCRIPTION_ID (optional but recommended)
+#   
+#   Repository Variables:
+#   - AZURE_RESOURCE_GROUP : name of the resource group containing the Logic App
+#   - AZURE_LOGICAPP_NAME : name of the target Logic App
+#
+# - The workflow assumes your Logic App code is in Workspace/LogicAppCiCd
