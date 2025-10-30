@@ -114,6 +114,7 @@ module logicapp 'br/public:avm/res/web/site:0.11.1' = {
       APP_KIND: 'workflowApp'
       WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(VaultName=${keyvault.outputs.name};SecretName=${storageAccountName}-connectionstring)'
       AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvault.outputs.name};SecretName=${storageAccountName}-connectionstring)'
+      AzureBlob_connectionString: '@Microsoft.KeyVault(VaultName=${keyvault.outputs.name};SecretName=${storageAccountName}-connectionstring)'
     }
   }
 }
