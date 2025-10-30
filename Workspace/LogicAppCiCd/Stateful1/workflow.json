@@ -8,7 +8,7 @@
                 "kind": "Http",
                 "inputs": {
                     "statusCode": 200,
-                    "body": "Hi @{body('Parse_JSON')?['name']}"
+                    "body": "Hi @{body('Parse_JSON')?['name']} you are welcome to LogicApp"
                 },
                 "runAfter": {
                     "Parse_JSON": [
