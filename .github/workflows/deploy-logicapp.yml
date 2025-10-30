@@ -30,8 +30,9 @@ jobs:
     - name: Build Logic App
       run: |
         cd "Workspace/LogicAppCiCd"
+        # Install extensions and sync triggers for Logic App
         func extensions install
-        dotnet build
+        # No need for dotnet build as this is a Standard Logic App
 
     - name: Package Logic App
       run: |
