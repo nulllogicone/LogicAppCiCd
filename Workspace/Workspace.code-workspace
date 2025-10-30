@@ -1,0 +1,18 @@
+{
+  "folders": [
+    {
+      "name": "LogicAppCiCd",
+      "path": "./LogicAppCiCd"
+    }
+  ],
+  "settings": {
+    "window.openFoldersInNewWindow": "on",
+    "terminal.integrated.env.windows": {
+      "PATH": "C:\\Users\\luchtfr\\.azurelogicapps\\dependencies\\DotNetSDK;${env:PATH}"
+    },
+    "omnisharp.dotNetCliPaths": [
+      "C:\\Users\\luchtfr\\.azurelogicapps\\dependencies\\DotNetSDK"
+    ],
+    "azurite.location": "C:\\Users\\luchtfr\\.azurelogicapps\\.azurite"
+  }
+}

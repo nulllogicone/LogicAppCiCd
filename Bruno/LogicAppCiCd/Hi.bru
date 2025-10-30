@@ -1,0 +1,29 @@
+meta {
+  name: Hi
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:7072/api/Stateful1/triggers/When_an_HTTP_request_is_received/invoke?api-version=2022-05-01&sp=/triggers/When_an_HTTP_request_is_received/run&sv=1.0&sig=p3-ra1sCjbozAF2uz2BTG6J-BF0wrql2jmocoKd6C5U
+  body: json
+  auth: inherit
+}
+
+params:query {
+  api-version: 2022-05-01
+  sp: /triggers/When_an_HTTP_request_is_received/run
+  sv: 1.0
+  sig: p3-ra1sCjbozAF2uz2BTG6J-BF0wrql2jmocoKd6C5U
+}
+
+body:json {
+  {
+    "name":"oli tolli"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
