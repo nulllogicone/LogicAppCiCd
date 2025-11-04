@@ -1,4 +1,4 @@
-name: Deploy Bicep to Azure
+name: Deploy Infra to Azure
 
 on:
   push:
@@ -24,6 +24,7 @@ jobs:
         uses: azure/cli@v1
         env:
           AZURE_LOCATION: ${{ secrets.AZURE_LOCATION }}
+          LOG_ANALYTICS_WORKSPACE_ID: ${{ vars.LOG_ANALYTICS_WORKSPACE_ID }}
         with:
           inlineScript: |
             echo "Starting subscription-scoped deployment of infra/main.bicep with test.bicepparam"
@@ -32,6 +33,7 @@ jobs:
               --location "$AZURE_LOCATION" \
               --template-file "infra/main.bicep" \
               --parameters "infra/test.bicepparam" \
+              --parameters logAnalyticsWorkspaceId="$LOG_ANALYTICS_WORKSPACE_ID" \
               --name deploy-main-bicep
 
 
