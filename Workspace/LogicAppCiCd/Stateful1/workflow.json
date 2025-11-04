@@ -56,7 +56,17 @@
         "triggers": {
             "When_an_HTTP_request_is_received": {
                 "type": "Request",
-                "kind": "Http"
+                "kind": "Http",
+                "inputs": {
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
             }
         }
     },

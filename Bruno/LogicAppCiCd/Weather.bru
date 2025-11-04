@@ -1,0 +1,23 @@
+meta {
+  name: Weather
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://localhost:7071/api/GetWeather/triggers/When_an_HTTP_request_is_received/invoke?api-version=2022-05-01&sp=/triggers/When_an_HTTP_request_is_received/run&sv=1.0&sig=ism_tuYUD31pIR-zlxiQfkw9KMkfTzYe-hHXz9U6MJM
+  body: none
+  auth: inherit
+}
+
+params:query {
+  api-version: 2022-05-01
+  sp: /triggers/When_an_HTTP_request_is_received/run
+  sv: 1.0
+  sig: ism_tuYUD31pIR-zlxiQfkw9KMkfTzYe-hHXz9U6MJM
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
