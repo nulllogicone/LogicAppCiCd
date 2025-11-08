@@ -9,4 +9,4 @@ https://github.com/karlrissland/Logic-App-Standard-Deployment
 
 ## Deployment
 
-Test subscription
+Test subscription on Azure
