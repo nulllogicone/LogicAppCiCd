@@ -1,9 +1,9 @@
 targetScope = 'subscription'
 
 
-param location string 
+param projectPrefix string = 'LogicAppCiCd'
+param location string = 'westeurope'
 param environment string
-param projectPrefix string
 param logAnalyticsWorkspaceId string
 param tags object = {}
 
@@ -21,8 +21,6 @@ resource appResourceGroup 'Microsoft.Resources/resourceGroups@2021-04-01' = {
   location: location
   tags: tags
 }
-
-
 
 module serverFarm 'br/public:avm/res/web/serverfarm:0.3.0' = {
   scope: appResourceGroup
