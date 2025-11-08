@@ -10,6 +10,16 @@
         "id": "/serviceProviders/AzureBlob"
       },
       "displayName": "blob_connection"
+    },
+    "azurequeues": {
+      "parameterValues": {
+        "connectionString": "@appsetting('azurequeues_connectionString')"
+      },
+      "parameterSetName": "connectionString",
+      "serviceProvider": {
+        "id": "/serviceProviders/azurequeues"
+      },
+      "displayName": "new_conn_queue"
     }
   }
 }

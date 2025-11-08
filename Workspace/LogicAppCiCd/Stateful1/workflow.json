@@ -11,7 +11,7 @@
                     "body": "Hi @{body('Parse_JSON')?['name']} you are welcome to LogicApp"
                 },
                 "runAfter": {
-                    "Upload_blob_to_storage_container": [
+                    "Add_a_message_to_queue": [
                         "SUCCEEDED"
                     ]
                 }
@@ -47,6 +47,25 @@
                 },
                 "runAfter": {
                     "Parse_JSON": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Add_a_message_to_queue": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "queueName": "stateful1queue",
+                        "message": "just to notify you about: @{body('Parse_JSON')?['name']}"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "azurequeues",
+                        "operationId": "putMessage",
+                        "serviceProviderId": "/serviceProviders/azurequeues"
+                    }
+                },
+                "runAfter": {
+                    "Upload_blob_to_storage_container": [
                         "SUCCEEDED"
                     ]
                 }
