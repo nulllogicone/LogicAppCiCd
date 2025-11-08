@@ -19,7 +19,7 @@
       "serviceProvider": {
         "id": "/serviceProviders/azurequeues"
       },
-      "displayName": "new_conn_queue"
+      "displayName": "queue_connection"
     }
   }
 }
